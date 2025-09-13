@@ -8,7 +8,7 @@ group = "org.gnit.bible"
 version = "1.0.0"
 application {
     mainClass.set("org.gnit.bible.ApplicationKt")
-
+    
     val isDevelopment: Boolean = project.ext.has("development")
     applicationDefaultJvmArgs = listOf("-Dio.ktor.development=$isDevelopment")
 }

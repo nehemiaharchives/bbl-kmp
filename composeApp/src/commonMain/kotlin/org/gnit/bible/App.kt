@@ -35,13 +35,13 @@ fun App() {
                 Text("Click me!")
             }
             AnimatedVisibility(showContent) {
-                val bible = remember { Bible().verses() }
+                val greeting = remember { Bible().verses() }
                 Column(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
                     Image(painterResource(Res.drawable.compose_multiplatform), null)
-                    Text("Genesis 1: $bible")
+                    Text("Compose: $greeting")
                 }
             }
         }

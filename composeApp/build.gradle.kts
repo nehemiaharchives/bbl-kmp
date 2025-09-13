@@ -15,19 +15,25 @@ kotlin {
             jvmTarget.set(JvmTarget.JVM_11)
         }
     }
-
+    
     listOf(
         iosArm64(),
-        iosSimulatorArm64()
+
+        // uncomment this when you are working on M1/2/3/4 chip on Mac to use simulator
+        //iosSimulatorArm64(),
+
+        // uncomment this when you are working on intel mac to use simulator
+        iosX64(),
+
     ).forEach { iosTarget ->
         iosTarget.binaries.framework {
             baseName = "ComposeApp"
             isStatic = true
         }
     }
-
+    
     jvm()
-
+    
     sourceSets {
         androidMain.dependencies {
             implementation(compose.preview)
