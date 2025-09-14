@@ -1,10 +1,18 @@
 package org.gnit.bible.cli
 
 import org.gnit.bible.Bible
+import com.github.ajalt.clikt.core.CliktCommand
+import com.github.ajalt.clikt.core.main
 
-fun main() {
+class Bbl: CliktCommand() {
 
-    val verses = Bible().verses()
+    val bible = Bible()
 
-    println("genesis 1:$verses")
+    override fun run() {
+        echo(bible.verses())
+    }
+}
+
+fun main(args: Array<String>) {
+    Bbl().main(args)
 }

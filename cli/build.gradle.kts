@@ -15,6 +15,7 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 implementation(projects.shared)
+                implementation(libs.clikt)
                 implementation(libs.kotlinx.coroutines)
             }
         }
@@ -27,6 +28,10 @@ kotlin {
             }
         }
     }
+}
+
+tasks.withType<JavaExec>().configureEach {
+    jvmArgs("--enable-native-access=ALL-UNNAMED")
 }
 
 tasks.register("buildNativeRelease") {
