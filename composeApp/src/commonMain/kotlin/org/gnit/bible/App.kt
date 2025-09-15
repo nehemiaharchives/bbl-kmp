@@ -35,7 +35,14 @@ fun App() {
                 Text("Click me!")
             }
             AnimatedVisibility(showContent) {
-                val greeting = remember { Bible().verses() }
+
+                var bytes by remember { mutableStateOf(ByteArray(0)) }
+                LaunchedEffect(Unit) {
+                    bytes = Res.readBytes("files/bblpacks/kjv/kjv.1.1.txt")
+                }
+
+                val greeting = bytes.decodeToString()
+
                 Column(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalAlignment = Alignment.CenterHorizontally,
