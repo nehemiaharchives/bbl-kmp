@@ -36,19 +36,14 @@ fun App() {
             }
             AnimatedVisibility(showContent) {
 
-                var bytes by remember { mutableStateOf(ByteArray(0)) }
-                LaunchedEffect(Unit) {
-                    bytes = Res.readBytes("files/bblpacks/kjv/kjv.1.1.txt")
-                }
-
-                val greeting = bytes.decodeToString()
+                val verse = ComposeBibleTextReader().getChapterText("kjv", 1, 1)
 
                 Column(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
                     Image(painterResource(Res.drawable.compose_multiplatform), null)
-                    Text("Compose: $greeting")
+                    Text("Genesis 1: $verse")
                 }
             }
         }
