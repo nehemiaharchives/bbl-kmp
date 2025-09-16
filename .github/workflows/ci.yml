@@ -132,9 +132,41 @@ jobs:
       - name: Run JVM Tests
         run: ./gradlew :cli:jvmTest
 
-  compose-app-test:
-    name: ComposeApp Test
+  compose-app-test-ios:
+    name: ComposeApp Test iOS
     runs-on: macos-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 24
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '24'
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Install LLVM and Clang
+        uses: KyleMayes/install-llvm-action@v2
+        with:
+          version: "19.1.4"
+
+      - name: Konan Cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.konan
+          key: ${{ runner.os }}-konan-${{ hashFiles('*.gradle.kts') }}
+          restore-keys: |
+            ${{ runner.os }}-konan-
+
+      - name: Run iOS Tests
+        run: ./gradlew :composeApp:iosArm64Test
+
+  compose-app-test-android:
+    name: ComposeApp Test Android
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -156,16 +188,27 @@ jobs:
         with:
           version: "19.1.4"
 
-      - name: Konan Cache
-        uses: actions/cache@v4
-        with:
-          path: ~/.konan
-          key: ${{ runner.os }}-konan-${{ hashFiles('*.gradle.kts') }}
-          restore-keys: |
-            ${{ runner.os }}-konan-
+      - name: Run Android Unit Tests
+        run: ./gradlew :composeApp:androidUnitTest
 
-      - name: Test ComposeApp
-        run: ./gradlew :composeApp:allTest
+  compose-app-test-jvm:
+    name: ComposeApp Test JVM Desktop
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 24
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '24'
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Run JVM Desktop Tests
+        run: ./gradlew :composeApp:jvmTest
 
   build-linux-cli:
     name: Build Linux CLI
