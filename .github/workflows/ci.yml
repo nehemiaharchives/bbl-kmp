@@ -70,6 +70,11 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
 
+      - name: Install LLVM and Clang
+        uses: KyleMayes/install-llvm-action@v2
+        with:
+          version: "19.1.4"
+
       - name: Konan Cache
         uses: actions/cache@v4
         with:
@@ -80,25 +85,6 @@ jobs:
 
       - name: Run Tests
         run: ./gradlew :cli:linuxX64Test
-
-  cli-test-jvm:
-    name: CLI Test JVM
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Set up JDK 24
-        uses: actions/setup-java@v4
-        with:
-          distribution: 'temurin'
-          java-version: '24'
-
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v4
-
-      - name: Run JVM Tests
-        run: ./gradlew :cli:jvmTest
 
   cli-test-macos:
     name: CLI Test macOS
@@ -127,6 +113,25 @@ jobs:
       - name: Run Tests
         run: ./gradlew :cli:macosArm64Test
 
+  cli-test-jvm:
+    name: CLI Test JVM
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 24
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '24'
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Run JVM Tests
+        run: ./gradlew :cli:jvmTest
+
   compose-app-test:
     name: ComposeApp Test
     runs-on: macos-latest
@@ -145,6 +150,11 @@ jobs:
 
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
+
+      - name: Install LLVM and Clang
+        uses: KyleMayes/install-llvm-action@v2
+        with:
+          version: "19.1.4"
 
       - name: Konan Cache
         uses: actions/cache@v4
