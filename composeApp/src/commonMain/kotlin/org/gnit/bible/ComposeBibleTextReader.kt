@@ -11,6 +11,9 @@ class ComposeBibleTextReader : BibleTextReader {
 
     private val cache = HashMap<String, String>()
 
+    override fun chapterFile(translation: String, book: Int, chapter: Int): String =
+        "files/$base/$translation/$translation.$book.$chapter.txt"
+
     @OptIn(InternalResourceApi::class)
     override fun readByPath(path: String): String {
         cache[path]?.let { return it }
