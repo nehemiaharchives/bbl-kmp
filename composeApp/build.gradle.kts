@@ -39,6 +39,13 @@ kotlin {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
         }
+
+        androidUnitTest.dependencies {
+            implementation(libs.kotlin.test)
+            implementation(libs.androidx.test.core)
+            implementation(libs.roboelectric)
+        }
+
         commonMain.dependencies {
             implementation(compose.runtime)
             implementation(compose.foundation)
@@ -83,6 +90,20 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
+    }
+    // THIS IS IMPORTANT FOR ROBOLECTRIC
+    testOptions {
+        unitTests {
+            // This tells Gradle to use Robolectric for unit tests
+            // that require the Android framework.
+            isIncludeAndroidResources = true // Essential for Robolectric to access resources
+
+            // If you were using JUnit 5 directly with Robolectric, you might add:
+            // useJUnitPlatform()
+            // However, with RobolectricTestRunner (JUnit 4 based), this isn't standard.
+            // If RobolectricTestRunner internally leverages parts of JUnit Platform,
+            // it's usually handled by Robolectric itself.
+        }
     }
 }
 

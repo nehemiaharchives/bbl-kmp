@@ -3,7 +3,7 @@ package org.gnit.bible
 import kotlin.test.Test
 import kotlin.test.assertTrue
 
-class ComposeBibleTextReaderTest {
+class ComposeBibleTextReaderTest : ResourcesTestBase() {
 
     val bibleTextReader = ComposeBibleTextReader()
 

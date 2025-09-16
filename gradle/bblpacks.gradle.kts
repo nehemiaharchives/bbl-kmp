@@ -58,16 +58,24 @@ val tarBblpacks = tasks.register("tarBblpacks") {
 
         val tarExe = System.getenv("TAR") ?: "tar"
         val tarAvailable = try {
-            exec { commandLine(tarExe, "--version") }.rethrowFailure(); true
+            val result = providers.exec {
+                commandLine(tarExe, "--version")
+                isIgnoreExitValue = true
+            }.result.get()
+            if(result.exitValue != 0){
+                throw GradleException("TAR not available or version check failed: ${result.exitValue}")
+            }else{
+                true
+            }
         } catch (_: Exception) { false }
 
         translations.forEach { t ->
             val outTar = File(tarDir, "$t.tar")
             if (tarAvailable) {
-                exec {
+                providers.exec {
                     workingDir = srcRoot
                     commandLine(tarExe, "-cf", outTar.absolutePath, "bblpacks/$t")
-                }.assertNormalExitValue()
+                }.result.get().assertNormalExitValue()
             } else {
                 // Minimal non-POSIX fallback to keep builds unblocked (prefer installing tar).
                 logger.warn("System 'tar' not found; writing a minimal fallback archive for $t (not POSIX TAR). Prefer installing tar.")
@@ -154,7 +162,7 @@ val compileCToObjects = tasks.register("compileCToObjects") {
         val sources = cDir.listFiles { f -> f.isFile && f.extension == "c" }?.sortedBy { it.name }.orEmpty()
         sources.forEach { c ->
             val out = File(objDir, c.nameWithoutExtension + ".o")
-            exec { commandLine(clang, "-c", "-O2", c.absolutePath, "-o", out.absolutePath) }.assertNormalExitValue()
+            providers.exec { commandLine(clang, "-c", "-O2", c.absolutePath, "-o", out.absolutePath) }.result.get().assertNormalExitValue()
         }
     }
 }
@@ -171,7 +179,7 @@ val buildEmbeddedArchive = tasks.register("buildEmbeddedArchive") {
         val ar = llvmArPath.get()
         val lib = libOutFile.get().asFile
         if (objs.isEmpty()) logger.warn("No object files to archive in $objDir")
-        exec { commandLine(ar, "rcs", lib.absolutePath, *objs.toTypedArray()) }.assertNormalExitValue()
+        providers.exec { commandLine(ar, "rcs", lib.absolutePath, *objs.toTypedArray()) }.result.get().assertNormalExitValue()
         logger.lifecycle("Built ${lib.absolutePath}")
     }
 }
