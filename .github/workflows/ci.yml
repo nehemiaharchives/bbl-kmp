@@ -115,6 +115,9 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-konan-
 
+      - name: temprally purge old konan cache
+        run: rm -rf ~/.konan/cache
+
       - name: Run Tests
         run: ./gradlew :cli:macosArm64Test
 
@@ -275,6 +278,9 @@ jobs:
           key: ${{ runner.os }}-konan-${{ hashFiles('*.gradle.kts', 'gradle/libs.versions.toml') }}
           restore-keys: |
             ${{ runner.os }}-konan-
+
+      - name: temprally purge old konan cache
+        run: rm -rf ~/.konan/cache
 
       - name: Build MacOSX64 Native Binary
         run: ./gradlew :cli:linkReleaseExecutableMacosArm64
