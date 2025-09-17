@@ -116,7 +116,7 @@ jobs:
             ${{ runner.os }}-konan-
 
       - name: temprally purge old konan cache
-        run: rm -rf ~/.konan/cache
+        run: rm -rf ~/.konan/cache && rm -rf ~/.konan/clang-cache
 
       - name: Run Tests
         run: ./gradlew :cli:macosArm64Test
@@ -280,7 +280,7 @@ jobs:
             ${{ runner.os }}-konan-
 
       - name: temprally purge old konan cache
-        run: rm -rf ~/.konan/cache
+        run: rm -rf ~/.konan/cache && rm -rf ~/.konan/clang-cache
 
       - name: Build MacOSX64 Native Binary
         run: ./gradlew :cli:linkReleaseExecutableMacosArm64
