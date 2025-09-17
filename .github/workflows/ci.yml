@@ -135,7 +135,14 @@ jobs:
           echo
           echo "Environment snapshot:"
           env | sort
-              
+      
+      - name: Xcode module cache snapshot
+        run: |
+          set -eux
+          ls -lah ~/Library/Developer/Xcode
+          ls -lah ~/Library/Developer/Xcode/DerivedData || true
+          find ~/Library/Developer/Xcode -name '*.pch' -maxdepth 4 | head
+
       - name: temprally purge old konan cache
         run: rm -rf ~/.konan/cache && rm -rf ~/.konan/clang-cache
 
@@ -320,6 +327,13 @@ jobs:
           echo
           echo "Environment snapshot:"
           env | sort
+      
+      - name: Xcode module cache snapshot
+        run: |
+          set -eux
+          ls -lah ~/Library/Developer/Xcode
+          ls -lah ~/Library/Developer/Xcode/DerivedData || true
+          find ~/Library/Developer/Xcode -name '*.pch' -maxdepth 4 | head
 
       - name: temprally purge old konan cache
         run: rm -rf ~/.konan/cache && rm -rf ~/.konan/clang-cache
