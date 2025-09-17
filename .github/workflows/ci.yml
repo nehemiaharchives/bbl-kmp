@@ -107,6 +107,9 @@ jobs:
         with:
           version: "19.1.7"
 
+      - name: temprally purge old konan cache
+        run: rm -rf ~/.konan/
+
       - name: Run Tests
         run: ./gradlew :cli:macosArm64Test
 
@@ -259,6 +262,9 @@ jobs:
         uses: KyleMayes/install-llvm-action@v2
         with:
           version: "19.1.7"
+      
+      - name: temprally purge old konan cache
+        run: rm -rf ~/.konan/
 
       - name: Build MacOSX64 Native Binary
         run: ./gradlew :cli:linkReleaseExecutableMacosArm64
