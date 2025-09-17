@@ -49,7 +49,7 @@ fun findTool(toolName: String): String {
         if (f.canExecute()) {
             if (needsVersioned) {
                 val v = toolMajorVersion(f.absolutePath)
-                if (v == llvmVersion) return f.absolutePath
+                if (v == llvmVersion) logger.lifecycle("${f.absolutePath} found in PATH will be used"); return f.absolutePath
             } else return f.absolutePath
         }
     }
@@ -62,7 +62,7 @@ fun findTool(toolName: String): String {
         else -> emptyList()
     }
     for (p in brewFallbacks) {
-        val f = File(p); if (f.canExecute()) return f.absolutePath
+        val f = File(p); if (f.canExecute()) logger.lifecycle("${f.absolutePath} installed via homebrew will be uesd"); return f.absolutePath
     }
 
     // Kotlin/Native Konan toolchains: enforce llvmVersion for clang/llvm-ar
@@ -75,7 +75,7 @@ fun findTool(toolName: String): String {
             if (needsVersioned) {
                 val v = toolMajorVersion(f.absolutePath)
                 if (v == llvmVersion) return f.absolutePath else continue
-            } else return f.absolutePath
+            } else logger.lifecycle("${f.absolutePath} found in .konan will be used");  return f.absolutePath
         }
     }
 
