@@ -117,7 +117,7 @@ jobs:
         run: echo "KONAN_DEBUG=1" >> "$GITHUB_ENV"
 
       - name: Run Tests
-        run: ./gradlew clean :cli:macosArm64Test
+        run: KONAN_DEBUG=1 ./gradlew clean :cli:macosArm64Test --debug --stacktrace
 
   cli-unittest-jvm:
     name: CLI Test JVM
