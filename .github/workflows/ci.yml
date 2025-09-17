@@ -110,8 +110,17 @@ jobs:
       - name: temprally purge old konan cache
         run: rm -rf ~/.konan/
 
+      - name: Enable Kotlin/Native compiler logs
+        run: echo 'kotlin.native.enableCompilerLogs=true' >> gradle.properties
+
+      - name: Module cache check
+        run: |
+          set -eux
+          echo "TMPDIR=$TMPDIR"
+          find "$TMPDIR" -maxdepth 4 -name '*.pch' | head
+
       - name: Run Tests
-        run: ./gradlew :cli:macosArm64Test
+        run: ./gradlew :cli:macosArm64Test --info --stacktrace
 
   cli-unittest-jvm:
     name: CLI Test JVM
@@ -266,5 +275,14 @@ jobs:
       - name: temprally purge old konan cache
         run: rm -rf ~/.konan/
 
+      - name: Enable Kotlin/Native compiler logs
+        run: echo 'kotlin.native.enableCompilerLogs=true' >> gradle.properties
+
+      - name: Module cache check
+        run: |
+          set -eux
+          echo "TMPDIR=$TMPDIR"
+          find "$TMPDIR" -maxdepth 4 -name '*.pch' | head
+
       - name: Build MacOSX64 Native Binary
-        run: ./gradlew :cli:linkReleaseExecutableMacosArm64
+        run: ./gradlew :cli:linkReleaseExecutableMacosArm64  --info --stacktrace
