@@ -162,7 +162,7 @@ jobs:
             ${{ runner.os }}-konan-
 
       - name: Run iOS Tests
-        run: ./gradlew :composeApp:iosArm64Test
+        run: ./gradlew :composeApp:iosSimulatorArm64Test
 
   compose-app-test-android:
     name: ComposeApp Test Android
@@ -189,7 +189,7 @@ jobs:
           version: "19.1.4"
 
       - name: Run Android Unit Tests
-        run: ./gradlew :composeApp:androidUnitTest
+        run: ./gradlew :composeApp:testReleaseUnitTest
 
   compose-app-test-jvm:
     name: ComposeApp Test JVM Desktop
@@ -272,4 +272,4 @@ jobs:
             ${{ runner.os }}-konan-
 
       - name: Build MacOSX64 Native Binary
-        run: ./gradlew :cli:linkReleaseExecutableMacosX64
+        run: ./gradlew :cli:linkReleaseExecutableMacosArm64

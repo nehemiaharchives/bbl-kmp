@@ -20,7 +20,7 @@ kotlin {
         iosArm64(),
 
         // uncomment this when you are working on M1/2/3/4 chip on Mac to use simulator
-        //iosSimulatorArm64(),
+        iosSimulatorArm64(),
 
         // uncomment this when you are working on intel mac to use simulator
         iosX64(),
