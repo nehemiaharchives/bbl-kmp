@@ -54,7 +54,7 @@ jobs:
       - name: Run Android Tests
         run: ./gradlew :shared:testReleaseUnitTest
 
-  cli-test-linux:
+  cli-unittest-linux:
     name: CLI Test Linux
     runs-on: ubuntu-latest
     steps:
@@ -86,39 +86,7 @@ jobs:
       - name: Run Tests
         run: ./gradlew :cli:linuxX64Test
 
-  cli-test-macos:
-    name: CLI Test macOS
-    runs-on: macos-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Set up JDK 24
-        uses: actions/setup-java@v4
-        with:
-          distribution: 'temurin'
-          java-version: '24'
-
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v4
-
-      - name: Install LLVM and Clang
-        uses: KyleMayes/install-llvm-action@v2
-        with:
-          version: "19.1.7"
-
-      - name: Konan Cache
-        uses: actions/cache@v4
-        with:
-          path: ~/.konan
-          key: ${{ runner.os }}-konan-${{ hashFiles('*.gradle.kts', 'gradle/libs.versions.toml') }}
-          restore-keys: |
-            ${{ runner.os }}-konan-
-
-      - name: Run Tests
-        run: ./gradlew :cli:macosArm64Test
-
-  cli-test-jvm:
+  cli-unittest-jvm:
     name: CLI Test JVM
     runs-on: ubuntu-latest
     steps:
@@ -137,8 +105,8 @@ jobs:
       - name: Run JVM Tests
         run: ./gradlew :cli:jvmTest
 
-  compose-app-test-ios:
-    name: ComposeApp Test iOS
+  cmp-test-ios:
+    name: CMP Test iOS
     runs-on: macos-latest
     steps:
       - name: Checkout code
@@ -169,8 +137,8 @@ jobs:
       - name: Run iOS Tests
         run: ./gradlew :composeApp:iosSimulatorArm64Test
 
-  compose-app-test-android:
-    name: ComposeApp Test Android
+  cmp-test-android:
+    name: CMP Test Android
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -196,8 +164,8 @@ jobs:
       - name: Run Android Unit Tests
         run: ./gradlew :composeApp:testReleaseUnitTest
 
-  compose-app-test-jvm:
-    name: ComposeApp Test JVM Desktop
+  cmp-test-jvm:
+    name: CMP Test JVM Desktop
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -215,66 +183,4 @@ jobs:
       - name: Run JVM Desktop Tests
         run: ./gradlew :composeApp:jvmTest
 
-  build-linux-cli:
-    name: Build Linux CLI
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
 
-      - name: Set up JDK 24
-        uses: actions/setup-java@v4
-        with:
-          distribution: 'temurin'
-          java-version: '24'
-
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v4
-
-      - name: Install LLVM and Clang
-        uses: KyleMayes/install-llvm-action@v2
-        with:
-          version: "19.1.7"
-
-      - name: Konan Cache
-        uses: actions/cache@v4
-        with:
-          path: ~/.konan
-          key: ${{ runner.os }}-konan-${{ hashFiles('*.gradle.kts', 'gradle/libs.versions.toml') }}
-          restore-keys: |
-            ${{ runner.os }}-konan-
-
-      - name: Build LinuxX64 Native Binary
-        run: ./gradlew :cli:linkReleaseExecutableLinuxX64
-
-  build-macos-cli:
-    name: Build macOS CLI
-    runs-on: macos-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Set up JDK 24
-        uses: actions/setup-java@v4
-        with:
-          distribution: 'temurin'
-          java-version: '24'
-
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v4
-
-      - name: Install LLVM and Clang
-        uses: KyleMayes/install-llvm-action@v2
-        with:
-          version: "19.1.7"
-
-      - name: Konan Cache
-        uses: actions/cache@v4
-        with:
-          path: ~/.konan
-          key: ${{ runner.os }}-konan-${{ hashFiles('*.gradle.kts', 'gradle/libs.versions.toml') }}
-          restore-keys: |
-            ${{ runner.os }}-konan-
-
-      - name: Build MacOSX64 Native Binary
-        run: ./gradlew :cli:linkReleaseExecutableMacosArm64
