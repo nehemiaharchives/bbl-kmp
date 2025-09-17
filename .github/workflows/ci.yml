@@ -114,7 +114,28 @@ jobs:
           key: ${{ runner.os }}-konan-${{ hashFiles('*.gradle.kts', 'gradle/libs.versions.toml') }}
           restore-keys: |
             ${{ runner.os }}-konan-
-
+              
+      - name: Konan debug snapshot
+        run: |
+          set -eux
+          echo "Kotlin/Native compiler:"
+          $HOME/.konan/kotlinc/bin/konanc -version || true
+          echo
+          echo "Kotlin/Native interop tool:"
+          $HOME/.konan/kotlinc/bin/cinterop -version || true
+          echo
+          echo "Konan cache tree (top level):"
+          find $HOME/.konan -maxdepth 2 -type d | sort
+          echo
+          echo "Precompiled headers still around?"
+          find $HOME/.konan -name '*.pch' -print | head -n 20
+          echo
+          echo "Toolchain symlink:"
+          ls -l $HOME/.konan/dependencies || true
+          echo
+          echo "Environment snapshot:"
+          env | sort
+              
       - name: temprally purge old konan cache
         run: rm -rf ~/.konan/cache && rm -rf ~/.konan/clang-cache
 
@@ -278,6 +299,27 @@ jobs:
           key: ${{ runner.os }}-konan-${{ hashFiles('*.gradle.kts', 'gradle/libs.versions.toml') }}
           restore-keys: |
             ${{ runner.os }}-konan-
+
+      - name: Konan debug snapshot
+        run: |
+          set -eux
+          echo "Kotlin/Native compiler:"
+          $HOME/.konan/kotlinc/bin/konanc -version || true
+          echo
+          echo "Kotlin/Native interop tool:"
+          $HOME/.konan/kotlinc/bin/cinterop -version || true
+          echo
+          echo "Konan cache tree (top level):"
+          find $HOME/.konan -maxdepth 2 -type d | sort
+          echo
+          echo "Precompiled headers still around?"
+          find $HOME/.konan -name '*.pch' -print | head -n 20
+          echo
+          echo "Toolchain symlink:"
+          ls -l $HOME/.konan/dependencies || true
+          echo
+          echo "Environment snapshot:"
+          env | sort
 
       - name: temprally purge old konan cache
         run: rm -rf ~/.konan/cache && rm -rf ~/.konan/clang-cache
