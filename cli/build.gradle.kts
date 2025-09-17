@@ -52,7 +52,6 @@ kotlin {
                     val inc = project.layout.buildDirectory.dir("embedded/include").get().asFile
                     includeDirs(inc)
                     compilerOpts("-I${inc.absolutePath}")
-
                     //linkerOps is not supported by Kotlin/Native
                     //linkerOpts("-L${embedDir.absolutePath}", "-lbibles")
                 }

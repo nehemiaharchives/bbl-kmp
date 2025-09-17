@@ -36,34 +36,61 @@ fun toolMajorVersion(exePath: String): Int? {
     } catch (_: Exception) { null }
 }
 
-fun findTool(toolName: String): String {
+fun findMacClang(): String {
+    val viaXcrun = runCatching {
+        val proc = ProcessBuilder("xcrun", "--find", "clang").redirectErrorStream(true).start()
+        val output = proc.inputStream.bufferedReader().use { it.readText() }.trim()
+        proc.waitFor()
+        output.takeIf { it.isNotBlank() && File(it).canExecute() }
+    }.getOrNull()
+
+    val path = viaXcrun
+        ?: File("/usr/bin/clang").takeIf { it.canExecute() }?.absolutePath
+        ?: throw GradleException("Cannot locate Xcode clang. Ensure Xcode Command Line Tools are installed.")
+
+    toolMajorVersion(path)
+    logger.lifecycle("$path (Xcode clang) will be used")
+    return path
+}
+
+fun findTool(toolName: String, requiredMajorVersion: Int? = null): String {
     System.getenv(toolName.uppercase())?.let { p ->
         val f = File(p); if (f.canExecute()) return f.absolutePath
     }
     val os = OperatingSystem.current()
     val exeName = if (os.isWindows) "$toolName.exe" else toolName
 
-    val needsVersioned = toolName == "clang" || toolName == "llvm-ar"
-    // From PATH: only accept clang/llvm-ar when major version matches llvmVersion
+    val needsVersioned = requiredMajorVersion != null
+    // From PATH: only accept tool when major version matches requiredMajorVersion (if provided)
     System.getenv("PATH")?.split(File.pathSeparatorChar)?.forEach { dir ->
         val f = File(dir, exeName)
         if (f.canExecute()) {
             if (needsVersioned) {
                 val v = toolMajorVersion(f.absolutePath)
-                if (v == llvmVersion) logger.lifecycle("${f.absolutePath} found in PATH will be used"); return f.absolutePath
-            } else return f.absolutePath
+                if (v == requiredMajorVersion) {
+                    logger.lifecycle("${f.absolutePath} found in PATH will be used")
+                    return f.absolutePath
+                }
+            } else {
+                return f.absolutePath
+            }
         }
     }
 
     // Homebrew llvm@<version> explicit paths (Intel and Apple Silicon)
-    val brewSuffix = "llvm@${llvmVersion}"
-    val brewFallbacks = when (toolName) {
-        "clang" -> listOf("/usr/local/opt/${brewSuffix}/bin/clang", "/opt/homebrew/opt/${brewSuffix}/bin/clang")
-        "llvm-ar" -> listOf("/usr/local/opt/${brewSuffix}/bin/llvm-ar", "/opt/homebrew/opt/${brewSuffix}/bin/llvm-ar")
-        else -> emptyList()
-    }
-    for (p in brewFallbacks) {
-        val f = File(p); if (f.canExecute()) logger.lifecycle("${f.absolutePath} installed via homebrew will be uesd"); return f.absolutePath
+    if (needsVersioned) {
+        val brewSuffix = "llvm@${requiredMajorVersion}"
+        val brewFallbacks = listOf(
+            "/usr/local/opt/${brewSuffix}/bin/$toolName",
+            "/opt/homebrew/opt/${brewSuffix}/bin/$toolName"
+        )
+        for (p in brewFallbacks) {
+            val f = File(p)
+            if (f.canExecute()) {
+                logger.lifecycle("${f.absolutePath} installed via Homebrew will be used")
+                return f.absolutePath
+            }
+        }
     }
 
     // Kotlin/Native Konan toolchains: enforce llvmVersion for clang/llvm-ar
@@ -75,17 +102,23 @@ fun findTool(toolName: String): String {
         if (f.canExecute()) {
             if (needsVersioned) {
                 val v = toolMajorVersion(f.absolutePath)
-                if (v == llvmVersion) return f.absolutePath else continue
-            } else logger.lifecycle("${f.absolutePath} found in .konan will be used");  return f.absolutePath
+                if (v == requiredMajorVersion) return f.absolutePath else continue
+            } else {
+                logger.lifecycle("${f.absolutePath} found in .konan will be used")
+                return f.absolutePath
+            }
         }
     }
 
-    val reason = if (needsVersioned) "Require version ${llvmVersion} for clang/llvm-ar." else ""
-    throw GradleException("Cannot find $toolName. $reason Set env $toolName, run brew install llvm@${llvmVersion}, or ensure a compatible toolchain is available.")
+    val reason = requiredMajorVersion?.let { "Require major version $it for $toolName." } ?: ""
+    val brewTip = requiredMajorVersion?.let { "run 'brew install llvm@${it}'" } ?: "ensure it is on PATH"
+    throw GradleException("Cannot find $toolName. $reason Set env $toolName or $brewTip.")
 }
 
-val clangPath = providers.provider { findTool("clang") }
-val llvmArPath = providers.provider { findTool("llvm-ar") }
+val clangPath = providers.provider {
+    if (OperatingSystem.current().isMacOsX) findMacClang() else findTool("clang", llvmVersion)
+}
+val llvmArPath = providers.provider { findTool("llvm-ar", llvmVersion) }
 
 // 1) TAR bblpacks preserving path "bblpacks/<t>/..."
 val tarBblpacks = tasks.register("tarBblpacks") {
