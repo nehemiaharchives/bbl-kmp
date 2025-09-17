@@ -31,6 +31,7 @@ fun toolMajorVersion(exePath: String): Int? {
         val proc = pb.start()
         val out = proc.inputStream.bufferedReader().use { it.readText() }
         runCatching { proc.waitFor() }
+        logger.lifecycle("$exePath version found out: $out")
         Regex("""\b(?:LLVM|clang)\s+version\s+([0-9]+)""").find(out)?.groupValues?.getOrNull(1)?.toIntOrNull()
     } catch (_: Exception) { null }
 }

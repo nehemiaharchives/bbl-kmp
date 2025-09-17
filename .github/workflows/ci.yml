@@ -248,7 +248,7 @@ jobs:
         run: ./gradlew :cli:linkReleaseExecutableLinuxX64
 
   cli-build-macos:
-    name: Build macOS CLI
+    name:  CLI Build macOS
     runs-on: macos-latest
     steps:
       - name: Checkout code
