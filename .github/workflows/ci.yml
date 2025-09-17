@@ -79,7 +79,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ~/.konan
-          key: ${{ runner.os }}-konan-${{ hashFiles('*.gradle.kts') }}
+          key: ${{ runner.os }}-konan-${{ hashFiles('*.gradle.kts', 'gradle/libs.versions.toml') }}
           restore-keys: |
             ${{ runner.os }}-konan-        
 
@@ -106,7 +106,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ~/.konan
-          key: ${{ runner.os }}-konan-${{ hashFiles('*.gradle.kts') }}
+          key: ${{ runner.os }}-konan-${{ hashFiles('*.gradle.kts', 'gradle/libs.versions.toml') }}
           restore-keys: |
             ${{ runner.os }}-konan-
 
@@ -157,7 +157,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ~/.konan
-          key: ${{ runner.os }}-konan-${{ hashFiles('*.gradle.kts') }}
+          key: ${{ runner.os }}-konan-${{ hashFiles('*.gradle.kts', 'gradle/libs.versions.toml') }}
           restore-keys: |
             ${{ runner.os }}-konan-
 
@@ -235,7 +235,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ~/.konan
-          key: ${{ runner.os }}-konan-${{ hashFiles('*.gradle.kts') }}
+          key: ${{ runner.os }}-konan-${{ hashFiles('*.gradle.kts', 'gradle/libs.versions.toml') }}
           restore-keys: |
             ${{ runner.os }}-konan-
 
@@ -267,7 +267,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ~/.konan
-          key: ${{ runner.os }}-konan-${{ hashFiles('*.gradle.kts') }}
+          key: ${{ runner.os }}-konan-${{ hashFiles('*.gradle.kts', 'gradle/libs.versions.toml') }}
           restore-keys: |
             ${{ runner.os }}-konan-
 
