@@ -107,45 +107,6 @@ jobs:
         with:
           version: "19.1.7"
 
-      - name: Konan Cache
-        uses: actions/cache@v4
-        with:
-          path: ~/.konan
-          key: ${{ runner.os }}-konan-${{ hashFiles('*.gradle.kts', 'gradle/libs.versions.toml') }}
-          restore-keys: |
-            ${{ runner.os }}-konan-
-              
-      - name: Konan debug snapshot
-        run: |
-          set -eux
-          echo "Kotlin/Native compiler:"
-          $HOME/.konan/kotlinc/bin/konanc -version || true
-          echo
-          echo "Kotlin/Native interop tool:"
-          $HOME/.konan/kotlinc/bin/cinterop -version || true
-          echo
-          echo "Konan cache tree (top level):"
-          find $HOME/.konan -maxdepth 2 -type d | sort
-          echo
-          echo "Precompiled headers still around?"
-          find $HOME/.konan -name '*.pch' -print | head -n 20
-          echo
-          echo "Toolchain symlink:"
-          ls -l $HOME/.konan/dependencies || true
-          echo
-          echo "Environment snapshot:"
-          env | sort
-      
-      - name: Xcode module cache snapshot
-        run: |
-          set -eux
-          ls -lah ~/Library/Developer/Xcode
-          ls -lah ~/Library/Developer/Xcode/ModuleCache.noindex || true
-          find    ~/Library/Developer/Xcode/ModuleCache.noindex -maxdepth 2 -name '*.pch' | head
-          
-      - name: temprally purge old konan cache
-        run: rm -rf ~/.konan/cache && rm -rf ~/.konan/clang-cache
-
       - name: Run Tests
         run: ./gradlew :cli:macosArm64Test
 
@@ -298,45 +259,6 @@ jobs:
         uses: KyleMayes/install-llvm-action@v2
         with:
           version: "19.1.7"
-
-      - name: Konan Cache
-        uses: actions/cache@v4
-        with:
-          path: ~/.konan
-          key: ${{ runner.os }}-konan-${{ hashFiles('*.gradle.kts', 'gradle/libs.versions.toml') }}
-          restore-keys: |
-            ${{ runner.os }}-konan-
-
-      - name: Konan debug snapshot
-        run: |
-          set -eux
-          echo "Kotlin/Native compiler:"
-          $HOME/.konan/kotlinc/bin/konanc -version || true
-          echo
-          echo "Kotlin/Native interop tool:"
-          $HOME/.konan/kotlinc/bin/cinterop -version || true
-          echo
-          echo "Konan cache tree (top level):"
-          find $HOME/.konan -maxdepth 2 -type d | sort
-          echo
-          echo "Precompiled headers still around?"
-          find $HOME/.konan -name '*.pch' -print | head -n 20
-          echo
-          echo "Toolchain symlink:"
-          ls -l $HOME/.konan/dependencies || true
-          echo
-          echo "Environment snapshot:"
-          env | sort
-      
-      - name: Xcode module cache snapshot
-        run: |
-          set -eux
-          ls -lah ~/Library/Developer/Xcode
-          ls -lah ~/Library/Developer/Xcode/ModuleCache.noindex || true
-          find    ~/Library/Developer/Xcode/ModuleCache.noindex -maxdepth 2 -name '*.pch' | head
-
-      - name: temprally purge old konan cache
-        run: rm -rf ~/.konan/cache && rm -rf ~/.konan/clang-cache
 
       - name: Build MacOSX64 Native Binary
         run: ./gradlew :cli:linkReleaseExecutableMacosArm64
