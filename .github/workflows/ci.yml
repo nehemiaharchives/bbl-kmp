@@ -140,9 +140,9 @@ jobs:
         run: |
           set -eux
           ls -lah ~/Library/Developer/Xcode
-          ls -lah ~/Library/Developer/Xcode/DerivedData || true
-          find ~/Library/Developer/Xcode -name '*.pch' -maxdepth 4 | head
-
+          ls -lah ~/Library/Developer/Xcode/ModuleCache.noindex || true
+          find    ~/Library/Developer/Xcode/ModuleCache.noindex -maxdepth 2 -name '*.pch' | head
+          
       - name: temprally purge old konan cache
         run: rm -rf ~/.konan/cache && rm -rf ~/.konan/clang-cache
 
@@ -332,8 +332,8 @@ jobs:
         run: |
           set -eux
           ls -lah ~/Library/Developer/Xcode
-          ls -lah ~/Library/Developer/Xcode/DerivedData || true
-          find ~/Library/Developer/Xcode -name '*.pch' -maxdepth 4 | head
+          ls -lah ~/Library/Developer/Xcode/ModuleCache.noindex || true
+          find    ~/Library/Developer/Xcode/ModuleCache.noindex -maxdepth 2 -name '*.pch' | head
 
       - name: temprally purge old konan cache
         run: rm -rf ~/.konan/cache && rm -rf ~/.konan/clang-cache
