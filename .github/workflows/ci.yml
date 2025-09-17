@@ -113,11 +113,8 @@ jobs:
       - name: Enable Kotlin/Native compiler logs
         run: echo 'kotlin.native.enableCompilerLogs=true' >> gradle.properties
 
-      - name: Module cache check
-        run: |
-          set -eux
-          echo "TMPDIR=$TMPDIR"
-          find "$TMPDIR" -maxdepth 4 -name '*.pch' | head
+      - name: Enable Konan tool logging
+        run: echo "KONAN_DEBUG=1" >> "$GITHUB_ENV"
 
       - name: Run Tests
         run: ./gradlew :cli:macosArm64Test --info --stacktrace
@@ -278,11 +275,8 @@ jobs:
       - name: Enable Kotlin/Native compiler logs
         run: echo 'kotlin.native.enableCompilerLogs=true' >> gradle.properties
 
-      - name: Module cache check
-        run: |
-          set -eux
-          echo "TMPDIR=$TMPDIR"
-          find "$TMPDIR" -maxdepth 4 -name '*.pch' | head
+      - name: Enable Konan tool logging
+        run: echo "KONAN_DEBUG=1" >> "$GITHUB_ENV"
 
       - name: Build MacOSX64 Native Binary
         run: ./gradlew :cli:linkReleaseExecutableMacosArm64  --info --stacktrace
