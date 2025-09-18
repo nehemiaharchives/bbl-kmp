@@ -101,6 +101,11 @@ jobs:
 
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
+    
+      - name: Setup Xcode
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: '16.4'
 
       - name: Install LLVM and Clang
         uses: KyleMayes/install-llvm-action@v2
@@ -109,6 +114,9 @@ jobs:
 
       - name: temprally purge old konan cache
         run: rm -rf ~/.konan/
+
+      - name: remove system wide global clang compiler cache
+        run: rm -rf ~/Library/Developer/Xcode/DerivedData/ModuleCache.noindex || true
 
       - name: Enable Kotlin/Native compiler logs
         run: echo 'kotlin.native.enableCompilerLogs=true' >> gradle.properties
