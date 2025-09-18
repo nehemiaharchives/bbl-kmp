@@ -122,7 +122,7 @@ jobs:
           echo "KONAN clang: ${KONAN_CLANG:-<not set>}"
           /Users/runner/.konan/dependencies/llvm-19-aarch64-macos-essentials-79/bin/clang --version || true
           xcrun --find clang && xcrun clang --version
-          
+
       - name: Force Xcode clang
         run: |
           set -eux
