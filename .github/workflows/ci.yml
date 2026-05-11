@@ -48,6 +48,13 @@ jobs:
             task: :shared:linuxX64Test
             needs_konan_cache: true
             job_type: Test
+          - platform: mingw
+            module_name: shared
+            os: windows-latest
+            timeout: 25
+            task: :shared:mingwX64Test
+            needs_konan_cache: true
+            job_type: Test
 
           - platform: jvm
             module_name: cli-core
@@ -71,6 +78,13 @@ jobs:
             needs_xcode: true
             xcode_version: '16.4'
             job_type: Test
+          - platform: mingw
+            module_name: cli-core
+            os: windows-latest
+            timeout: 30
+            task: :cli:core:mingwX64Test
+            needs_konan_cache: true
+            job_type: Test
 
           - platform: jvm
             module_name: cli-search-common
@@ -83,6 +97,13 @@ jobs:
             os: ubuntu-latest
             timeout: 20
             task: :cli:search:common:linuxX64Test
+            needs_konan_cache: true
+            job_type: Test
+          - platform: mingw
+            module_name: cli-search-common
+            os: windows-latest
+            timeout: 25
+            task: :cli:search:common:mingwX64Test
             needs_konan_cache: true
             job_type: Test
 
@@ -99,6 +120,13 @@ jobs:
             task: :cli:search:extra:linuxX64Test
             needs_konan_cache: true
             job_type: Test
+          - platform: mingw
+            module_name: cli-search-extra
+            os: windows-latest
+            timeout: 25
+            task: :cli:search:extra:mingwX64Test
+            needs_konan_cache: true
+            job_type: Test
 
           - platform: jvm
             module_name: cli-search-kuromoji
@@ -111,6 +139,13 @@ jobs:
             os: ubuntu-latest
             timeout: 20
             task: :cli:search:kuromoji:linuxX64Test
+            needs_konan_cache: true
+            job_type: Test
+          - platform: mingw
+            module_name: cli-search-kuromoji
+            os: windows-latest
+            timeout: 25
+            task: :cli:search:kuromoji:mingwX64Test
             needs_konan_cache: true
             job_type: Test
 
@@ -127,6 +162,13 @@ jobs:
             task: :cli:search:morfologik:linuxX64Test
             needs_konan_cache: true
             job_type: Test
+          - platform: mingw
+            module_name: cli-search-morfologik
+            os: windows-latest
+            timeout: 25
+            task: :cli:search:morfologik:mingwX64Test
+            needs_konan_cache: true
+            job_type: Test
 
           - platform: jvm
             module_name: cli-search-nori
@@ -141,6 +183,13 @@ jobs:
             task: :cli:search:nori:linuxX64Test
             needs_konan_cache: true
             job_type: Test
+          - platform: mingw
+            module_name: cli-search-nori
+            os: windows-latest
+            timeout: 25
+            task: :cli:search:nori:mingwX64Test
+            needs_konan_cache: true
+            job_type: Test
 
           - platform: jvm
             module_name: cli-search-smartcn
@@ -153,6 +202,13 @@ jobs:
             os: ubuntu-latest
             timeout: 20
             task: :cli:search:smartcn:linuxX64Test
+            needs_konan_cache: true
+            job_type: Test
+          - platform: mingw
+            module_name: cli-search-smartcn
+            os: windows-latest
+            timeout: 25
+            task: :cli:search:smartcn:mingwX64Test
             needs_konan_cache: true
             job_type: Test
 
@@ -192,6 +248,13 @@ jobs:
             needs_konan_cache: true
             needs_xcode: true
             xcode_version: '16.4'
+            job_type: Build
+          - platform: mingw
+            module_name: cli-core-build
+            os: windows-latest
+            timeout: 30
+            task: :cli:core:linkReleaseExecutableMingwX64
+            needs_konan_cache: true
             job_type: Build
 
     steps:
