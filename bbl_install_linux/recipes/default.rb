@@ -28,7 +28,7 @@ cookbook_file bbl_bin_path do
   mode '0755'
 end
 
-node['bbl_install']['helper_bin_names'].each do |bin_name|
+node['bbl_install_linux']['helper_bin_names'].each do |bin_name|
   cookbook_file "#{bin_dir}/#{bin_name}" do
     source bin_name
     owner 'root'
@@ -37,7 +37,7 @@ node['bbl_install']['helper_bin_names'].each do |bin_name|
   end
 end
 
-node['bbl_install']['pack_names'].each do |pack_name|
+node['bbl_install_linux']['pack_names'].each do |pack_name|
   cookbook_file "#{pack_dir}/#{pack_name}" do
     source pack_name
     owner 'root'

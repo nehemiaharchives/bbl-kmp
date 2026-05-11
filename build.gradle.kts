@@ -1,4 +1,4 @@
-import org.gradle.api.tasks.Sync
+import org.gradle.api.tasks.Copy
 import org.jetbrains.kotlin.gradle.targets.native.tasks.KotlinNativeTest
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 import org.jetbrains.kotlin.gradle.plugin.mpp.DisableCacheInKotlinVersion
@@ -57,11 +57,11 @@ subprojects {
         }
 }
 
-val bblInstallFilesDir = layout.projectDirectory.dir("bbl_install/files")
+val bblInstallLinuxFilesPath = "bbl_install_linux/files"
+val bblInstallWindowsFilesPath = "bbl_install_windows/files"
 
-val stageBblInstallFixtures = tasks.register<Sync>("stageBblInstallFixtures") {
-    into(bblInstallFilesDir)
-
+val stageBblInstallLinuxFixtures = tasks.register<Copy>("stageBblInstallLinuxFixtures") {
+    into(layout.projectDirectory.dir(bblInstallLinuxFilesPath))
     from(project(":cli:core").layout.buildDirectory.dir("bin/linuxX64/releaseExecutable")) {
         include("bbl.kexe")
         rename("bbl\\.kexe", "bbl")
@@ -84,4 +84,33 @@ val stageBblInstallFixtures = tasks.register<Sync>("stageBblInstallFixtures") {
     from(project(":server").layout.projectDirectory.dir("src/main/resources/files/bblpacks")) {
         include("*.zip")
     }
+}
+
+val stageBblInstallWindowsFixtures = tasks.register<Copy>("stageBblInstallWindowsFixtures") {
+    into(layout.projectDirectory.dir(bblInstallWindowsFilesPath))
+
+    from(project(":cli:core").layout.buildDirectory.dir("bin/mingwX64/releaseExecutable")) {
+        include("bbl.exe")
+    }
+
+    listOf(
+        ":cli:search:common" to "bbl-search-common",
+        ":cli:search:extra" to "bbl-search-extra",
+        ":cli:search:kuromoji" to "bbl-search-kuromoji",
+        ":cli:search:morfologik" to "bbl-search-morfologik",
+        ":cli:search:nori" to "bbl-search-nori",
+        ":cli:search:smartcn" to "bbl-search-smartcn",
+    ).forEach { (projectPath, binaryName) ->
+        from(project(projectPath).layout.buildDirectory.dir("bin/mingwX64/releaseExecutable")) {
+            include("$binaryName.exe")
+        }
+    }
+
+    from(project(":server").layout.projectDirectory.dir("src/main/resources/files/bblpacks")) {
+        include("*.zip")
+    }
+}
+
+val stageBblInstallFixtures = tasks.register("stageBblInstallFixtures") {
+    dependsOn(stageBblInstallLinuxFixtures, stageBblInstallWindowsFixtures)
 }

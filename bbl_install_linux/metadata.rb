@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-name             'bbl_install'
+name             'bbl_install_linux'
 maintainer       'Hokuto Joel Ide'
 maintainer_email 'nehemiaharchive@gmail.com'
 license          'Apache 2'
@@ -14,4 +14,4 @@ supports 'ubuntu'
 chef_version '>= 13'
 
 # Provided recipes
-recipe 'bbl_install::default', 'Installs native bbl binary, helper binaries, and pack zips'
+recipe 'bbl_install_linux::default', 'Installs native bbl binary, helper binaries, and pack zips'

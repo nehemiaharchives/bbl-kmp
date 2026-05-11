@@ -1,6 +1,6 @@
 require 'chefspec'
 
-describe 'bbl_install::default' do
+describe 'bbl_install_linux::default' do
   let(:helper_bin_names) do
     %w[
       bbl-search-common
@@ -26,8 +26,8 @@ describe 'bbl_install::default' do
 
   let(:chef_run) do
     ChefSpec::SoloRunner.new(platform: 'ubuntu', version: '24.04') do |node|
-      node.normal['bbl_install']['helper_bin_names'] = helper_bin_names
-      node.normal['bbl_install']['pack_names'] = pack_names
+      node.normal['bbl_install_linux']['helper_bin_names'] = helper_bin_names
+      node.normal['bbl_install_linux']['pack_names'] = pack_names
     end.converge(described_recipe)
   end
 

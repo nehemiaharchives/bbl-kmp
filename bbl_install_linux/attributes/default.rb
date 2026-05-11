@@ -1,4 +1,4 @@
-default['bbl_install']['helper_bin_names'] = %w[
+default['bbl_install_linux']['helper_bin_names'] = %w[
   bbl-search-common
   bbl-search-extra
   bbl-search-kuromoji
@@ -7,7 +7,7 @@ default['bbl_install']['helper_bin_names'] = %w[
   bbl-search-smartcn
 ]
 
-default['bbl_install']['pack_names'] = %w[
+default['bbl_install_linux']['pack_names'] = %w[
   cunp.zip
   webus.zip
   kjv.zip

@@ -25,4 +25,4 @@ platforms:
 suites:
   - name: default
     run_list:
-      - recipe[bbl_install::default]
+      - recipe[bbl_install_linux::default]
