@@ -30,21 +30,23 @@ subprojects {
         plugins.withId("org.jetbrains.kotlin.multiplatform") {
             extensions.configure<KotlinMultiplatformExtension> {
                 targets.withType<KotlinNativeTarget>().configureEach {
-                    binaries.getTest("", NativeBuildType.DEBUG).apply {
-                        @Suppress("DEPRECATION")
-                        @OptIn(KotlinNativeCacheApi::class)
-                        disableNativeCache(
-                            DisableCacheInKotlinVersion.`2_3_20`,
-                            "Clikt native caches produce duplicate symbols in cli test binaries"
-                        )
-                    }
-                    binaries.withType<org.jetbrains.kotlin.gradle.plugin.mpp.Executable>().configureEach {
-                        @Suppress("DEPRECATION")
-                        @OptIn(KotlinNativeCacheApi::class)
-                        disableNativeCache(
-                            DisableCacheInKotlinVersion.`2_3_20`,
-                            "Clikt native caches produce duplicate symbols in cli executable binaries"
-                        )
+                    if (name != "mingwX64") {
+                        binaries.getTest("", NativeBuildType.DEBUG).apply {
+                            @Suppress("DEPRECATION")
+                            @OptIn(KotlinNativeCacheApi::class)
+                            disableNativeCache(
+                                DisableCacheInKotlinVersion.`2_3_20`,
+                                "Clikt native caches produce duplicate symbols in cli test binaries"
+                            )
+                        }
+                        binaries.withType<org.jetbrains.kotlin.gradle.plugin.mpp.Executable>().configureEach {
+                            @Suppress("DEPRECATION")
+                            @OptIn(KotlinNativeCacheApi::class)
+                            disableNativeCache(
+                                DisableCacheInKotlinVersion.`2_3_20`,
+                                "Clikt native caches produce duplicate symbols in cli executable binaries"
+                            )
+                        }
                     }
                 }
             }
