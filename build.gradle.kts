@@ -61,6 +61,8 @@ val bblInstallLinuxFilesPath = "bbl_install_linux/files"
 val bblInstallWindowsFilesPath = "bbl_install_windows/files"
 
 val stageBblInstallLinuxFixtures = tasks.register<Copy>("stageBblInstallLinuxFixtures") {
+    dependsOn(":cli:linkReleaseExecutableLinuxX64")
+
     into(layout.projectDirectory.dir(bblInstallLinuxFilesPath))
     from(project(":cli:core").layout.buildDirectory.dir("bin/linuxX64/releaseExecutable")) {
         include("bbl.kexe")
@@ -87,6 +89,8 @@ val stageBblInstallLinuxFixtures = tasks.register<Copy>("stageBblInstallLinuxFix
 }
 
 val stageBblInstallWindowsFixtures = tasks.register<Copy>("stageBblInstallWindowsFixtures") {
+    dependsOn(":cli:linkReleaseExecutableMingwX64")
+
     into(layout.projectDirectory.dir(bblInstallWindowsFilesPath))
 
     from(project(":cli:core").layout.buildDirectory.dir("bin/mingwX64/releaseExecutable")) {

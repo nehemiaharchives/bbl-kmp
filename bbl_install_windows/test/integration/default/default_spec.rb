@@ -113,6 +113,60 @@ describe file("#{bin_dir}\\bbl-search-smartcn.exe") do
   it { should be_file }
 end
 
+describe command(bbl_command('search Jesus Christ')) do
+  its('exit_status') { should eq 0 }
+  its('stdout') { should match(/The book of the genealogy of Jesus Christ/) }
+end
+
+describe 'bbl search Jesus Christ exact output' do
+  include_context 'search helpers'
+  subject(:results) { search_results(bbl_command('search Jesus Christ')) }
+
+  it 'starts with the expected webus verse text' do
+    expect(results.first).to eq('Matthew 1:1 The book of the genealogy of Jesus Christ, the son of David, the son of Abraham.')
+  end
+
+  it 'returns multiple results by default' do
+    expect(results.length).to be > 1
+  end
+end
+
+describe command(bbl_command('search Jesus Christ in kjv')) do
+  its('exit_status') { should eq 0 }
+  its('stdout') { should match(/The book of the generation of Jesus Christ/) }
+end
+
+describe 'bbl search Jesus Christ in kjv exact output' do
+  include_context 'search helpers'
+  subject(:results) { search_results(bbl_command('search Jesus Christ in kjv')) }
+
+  it 'starts with the expected kjv verse text' do
+    expect(results.first).to eq('Matthew 1:1 The book of the generation of Jesus Christ, the son of David, the son of Abraham.')
+  end
+
+  it 'returns multiple results by default' do
+    expect(results.length).to be > 1
+  end
+end
+
+describe command(bbl_command('search Jesus Christ in romans')) do
+  its('exit_status') { should eq 0 }
+  its('stdout') { should match(/Paul, a servant of Jesus Christ/) }
+end
+
+describe 'bbl search Jesus Christ in romans exact output' do
+  include_context 'search helpers'
+  subject(:results) { search_results(bbl_command('search Jesus Christ in romans')) }
+
+  it 'starts with the expected romans webus verse text' do
+    expect(results.first).to eq('Romans 1:1 Paul, a servant of Jesus Christ, called to be an apostle, set apart for the Good News of God,')
+  end
+
+  it 'returns multiple Romans hits' do
+    expect(results.length).to be > 1
+  end
+end
+
 describe command(bbl_command('search Jesus Christ in romans 5-12')) do
   its('exit_status') { should eq 0 }
   its('stdout') { should match(/Being therefore justified by faith/) }
@@ -161,11 +215,54 @@ describe 'bbl search Japanese term in jc exact output' do
   end
 end
 
+describe 'bbl search Korean term in krv exact output' do
+  include_context 'search helpers'
+  let(:query) { "\u{C608}\u{C218} \u{ADF8}\u{B9AC}\u{C2A4}\u{B3C4}" }
+  let(:command_text) { bbl_command("search #{query} in krv") }
+  let(:result) { command(command_text) }
+  subject(:results) { search_results(command_text) }
+
+  it 'returns successfully' do
+    expect(result.exit_status).to eq(0)
+  end
+end
+
 
 describe 'bbl search Chinese term in cunp exact output' do
   include_context 'search helpers'
   let(:query) { "\u{8036}\u{7A23}\u{57FA}\u{7763}" }
   let(:command_text) { bbl_command("search #{query} in cunp") }
+  let(:result) { command(command_text) }
+  subject(:results) { search_results(command_text) }
+
+  it 'returns successfully' do
+    expect(result.exit_status).to eq(0)
+  end
+end
+
+describe 'bbl search Jezusa Chrystusa in ubg exact output' do
+  include_context 'search helpers'
+  let(:command_text) { bbl_command('search Jezusa Chrystusa in ubg') }
+  let(:result) { command(command_text) }
+  subject(:results) { search_results(command_text) }
+
+  it 'returns successfully' do
+    expect(result.exit_status).to eq(0)
+  end
+
+  it 'includes the expected morfologik phrase' do
+    expect(search_stdout(command_text)).to include('Księga rodu Jezusa Chrystusa')
+  end
+
+  it 'starts with the expected morfologik verse text' do
+    expect(results.first).to eq('Mateusza 1:1 Księga rodu Jezusa Chrystusa, syna Dawida, syna Abrahama.')
+  end
+end
+
+describe 'bbl search Vietnamese term in kttv exact output' do
+  include_context 'search helpers'
+  let(:query) { "J\u{00EA}sus Christ" }
+  let(:command_text) { bbl_command("search #{query} in kttv") }
   let(:result) { command(command_text) }
   subject(:results) { search_results(command_text) }
 
