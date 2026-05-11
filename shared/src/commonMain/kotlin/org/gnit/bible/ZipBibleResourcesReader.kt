@@ -153,7 +153,7 @@ class ZipBibleResourcesReader(
 
         private fun inflate(compressed: ByteArray, expectedSize: Long): ByteArray {
             val source = Buffer().write(compressed)
-            return InflaterSource(source, Inflater(nowrap = true)).use { inflater ->
+            return InflaterSource(source, Inflater(true)).use { inflater ->
                 inflater.buffer().readByteArray(expectedSize)
             }
         }
