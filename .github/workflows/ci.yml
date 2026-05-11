@@ -252,8 +252,8 @@ jobs:
           - platform: mingw
             module_name: cli-core-build
             os: windows-latest
-            timeout: 30
-            task: :cli:core:linkReleaseExecutableMingwX64
+            timeout: 45
+            task: stageBblInstallWindowsFixtures "-Pbblpacks.embed=false"
             needs_konan_cache: true
             job_type: Build
 
@@ -292,6 +292,15 @@ jobs:
       - name: Run task
         run: ./gradlew ${{ matrix.task }}
 
+      - name: Upload Windows install fixtures
+        if: ${{ matrix.platform == 'mingw' && matrix.module_name == 'cli-core-build' && matrix.job_type == 'Build' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: bbl-install-windows-files
+          path: bbl_install_windows/files/
+          if-no-files-found: error
+          retention-days: 1
+
       - name: Build Summary
         if: always()
         run: |
@@ -303,6 +312,7 @@ jobs:
 
   e2e-mingw-cli:
     name: E2E (mingw/cli)
+    needs: tests
     runs-on: windows-latest
     timeout-minutes: 90
 
@@ -310,25 +320,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v5
 
-      - name: Set up JDK 24
-        uses: actions/setup-java@v5
+      - name: Download Windows install fixtures
+        uses: actions/download-artifact@v4
         with:
-          distribution: 'temurin'
-          java-version: '24'
-
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v4
-
-      - name: Konan Cache
-        uses: actions/cache@v4
-        with:
-          path: ~/.konan
-          key: ${{ runner.os }}-konan-${{ hashFiles('*.gradle.kts', 'gradle/libs.versions.toml') }}
-          restore-keys: |
-            ${{ runner.os }}-konan-
-
-      - name: Stage Windows install fixtures
-        run: ./gradlew.bat stageBblInstallWindowsFixtures "-Pbblpacks.embed=false"
+          name: bbl-install-windows-files
+          path: bbl_install_windows/files
 
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
