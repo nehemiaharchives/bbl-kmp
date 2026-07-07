@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.absolutePadding
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
@@ -125,6 +126,8 @@ fun TopBarContent(
         } else {
             bibleState.mainTranslation.language.sansFontFamily()
         }
+        val titleBookControlVerticalOffset =
+            TITLE_BOOK_CONTROL_VERTICAL_OVERWRAP_DELTA.coerceAtLeast(0).dp
 
         Row(
             modifier = Modifier
@@ -141,6 +144,7 @@ fun TopBarContent(
             Box(
                 modifier = Modifier
                     .padding(top = max(min(bibleState.fontSize, 10), 5).dp)
+                    .offset(y = titleBookControlVerticalOffset)
                     .weight(1f),
                 contentAlignment = Alignment.Center
             ) {
