@@ -1,3 +1,7 @@
+bbl-kmp was experimental and development repository of new version of bbl using Kotlin Multiplatform.
+The development was successful and the repo is migrated into original bbl repo.
+This repo will be archived and kept as reference.
+
 # bbl
 A command line tool to read and search the Holy Bible.
 
